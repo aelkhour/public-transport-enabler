@@ -56,7 +56,7 @@ public class NzProvider extends AbstractNavitiaProvider
 		}
 	}
 
-	private static final Map<String, Style> STYLES = new HashMap<>();
+	private static final Map<String, Style> STYLES = new HashMap<String, Style>();
 
 	static
 	{
