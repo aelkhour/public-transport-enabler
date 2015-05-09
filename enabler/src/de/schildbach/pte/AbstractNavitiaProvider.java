@@ -1019,7 +1019,7 @@ public abstract class AbstractNavitiaProvider extends AbstractNetworkProvider
 	{
 		final String nameCstr = constraint.toString();
 
-		final String queryUri = uri() + "places?q=" + ParserUtils.urlEncode(nameCstr) + "&type[]=stop_area&type[]=address" + "&depth=1";
+		final String queryUri = uri() + "places?q=" + ParserUtils.urlEncode(nameCstr) + "&type[]=stop_area&type[]=address&type[]=poi" + "&depth=1";
 		final CharSequence page = ParserUtils.scrape(queryUri, authorization);
 
 		try
