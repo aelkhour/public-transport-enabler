@@ -743,6 +743,66 @@ public abstract class AbstractNavitiaProvider extends AbstractNetworkProvider
 		}
 	}
 
+	private QueryTripsContext buildContext(final Location from, final Location to, final JSONObject head) throws IOException
+	{
+		// Get previous and next query Uris.
+		String prevQueryUri = null;
+		String nextQueryUri = null;
+		try
+		{
+			final JSONArray links = head.getJSONArray("links");
+			for (int i = 0; i < links.length(); ++i)
+			{
+				final JSONObject link = links.getJSONObject(i);
+				final String type = link.getString("type");
+				if (type.equals("prev"))
+				{
+					prevQueryUri = link.getString("href");
+				}
+				else if (type.equals("next"))
+				{
+					nextQueryUri = link.getString("href");
+				}
+			}
+		}
+		catch (final JSONException jsonExc)
+		{
+			throw new ParserException(jsonExc);
+		}
+
+		// Build context.
+		QueryTripsContext context = new Context(from, to, prevQueryUri, nextQueryUri);
+		return context;
+	}
+
+	private QueryTripsResult handleJourneyError(final ResultHeader resultHeader, final JSONObject head) throws IOException
+	{
+		try
+		{
+			final JSONObject error = head.getJSONObject("error");
+			final String id = error.getString("id");
+
+			if (id.equals("no_solution"))
+				return new QueryTripsResult(resultHeader, QueryTripsResult.Status.NO_TRIPS);
+			else if (id.equals("date_out_of_bounds"))
+				return new QueryTripsResult(resultHeader, QueryTripsResult.Status.INVALID_DATE);
+			else if (id.equals("no_origin"))
+				return new QueryTripsResult(resultHeader, QueryTripsResult.Status.UNKNOWN_FROM);
+			else if (id.equals("no_destination"))
+				return new QueryTripsResult(resultHeader, QueryTripsResult.Status.UNKNOWN_TO);
+			else if (id.equals("no_origin_nor_destination"))
+				return new QueryTripsResult(resultHeader, QueryTripsResult.Status.UNKNOWN_FROM);
+			else if (id.equals("unknown_object"))
+				return new QueryTripsResult(resultHeader, QueryTripsResult.Status.UNKNOWN_FROM);
+			else
+				throw new IllegalArgumentException("Unhandled error id: " + id);
+		}
+		catch (final JSONException jsonExc)
+		{
+			throw new ParserException(jsonExc);
+		}
+	}	
+
 	@Override
 	protected boolean hasCapability(final Capability capability)
 	{
@@ -1093,36 +1153,17 @@ public abstract class AbstractNavitiaProvider extends AbstractNetworkProvider
 
 					if (head.has("error"))
 					{
-						final JSONObject error = head.getJSONObject("error");
-						final String id = error.getString("id");
-
-						if (id.equals("no_solution"))
-							return new QueryTripsResult(resultHeader, QueryTripsResult.Status.NO_TRIPS);
-						else
-							throw new IllegalArgumentException("Unhandled error id: " + id);
+						// Handle journey error.
+						QueryTripsResult result = handleJourneyError(resultHeader, head);
+						return result;
 					}
 					else
 					{
 						// Fill context.
-						String prevQueryUri = null;
-						String nextQueryUri = null;
-						final JSONArray links = head.getJSONArray("links");
-						for (int i = 0; i < links.length(); ++i)
-						{
-							final JSONObject link = links.getJSONObject(i);
-							final String type = link.getString("type");
-							if (type.equals("prev"))
-							{
-								prevQueryUri = link.getString("href");
-							}
-							else if (type.equals("next"))
-							{
-								nextQueryUri = link.getString("href");
-							}
-						}
+						QueryTripsContext context = buildContext(from, to, head);
 
-						final QueryTripsResult result = new QueryTripsResult(resultHeader, queryUri.toString(), from, null, to, new Context(from, to,
-								prevQueryUri, nextQueryUri), new LinkedList<Trip>());
+						final QueryTripsResult result = new QueryTripsResult(resultHeader, queryUri.toString(), from, null, to, context,
+								new LinkedList<Trip>());
 
 						parseQueryTripsResult(head, from, to, result);
 
@@ -1189,19 +1230,24 @@ public abstract class AbstractNavitiaProvider extends AbstractNetworkProvider
 			{
 				final JSONObject head = new JSONObject(page.toString());
 
-				// Fill context.
-				final JSONArray links = head.getJSONArray("links");
-				final JSONObject prev = links.getJSONObject(0);
-				final String prevQueryUri = prev.getString("href");
-				final JSONObject next = links.getJSONObject(1);
-				final String nextQueryUri = next.getString("href");
+				if (head.has("error"))
+				{
+					// Handle journey error.
+					QueryTripsResult result = handleJourneyError(resultHeader, head);
+					return result;
+				}
+				else
+				{
+					// Fill context.
+					QueryTripsContext newContext = buildContext(from, to, head);
 
-				final QueryTripsResult result = new QueryTripsResult(resultHeader, queryUri, from, null, to, new Context(from, to, prevQueryUri,
-						nextQueryUri), new LinkedList<Trip>());
+					final QueryTripsResult result = new QueryTripsResult(resultHeader, queryUri, from, null, to, newContext,
+								new LinkedList<Trip>());
 
-				parseQueryTripsResult(head, from, to, result);
+					parseQueryTripsResult(head, from, to, result);
 
-				return result;
+					return result;
+				}
 			}
 			else
 			{
