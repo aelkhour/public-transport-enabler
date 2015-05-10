@@ -20,6 +20,7 @@ package de.schildbach.pte.live;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Date;
@@ -103,9 +104,10 @@ public abstract class AbstractNavitiaProviderLiveTest extends AbstractProviderLi
 		print(result);
 	}
 
-	protected final void nearbyStationsInvalidStation(final String stationId) throws IOException
+	@Test
+	public void nearbyStationsInvalidStation() throws Exception
 	{
-		final NearbyLocationsResult result = queryNearbyLocations(EnumSet.of(LocationType.STATION), new Location(LocationType.STATION, stationId),
+		final NearbyLocationsResult result = queryNearbyLocations(EnumSet.of(LocationType.STATION), new Location(LocationType.STATION, "qwertyuioplaksjdkashfzmxczjf"),
 				700, 10);
 		assertEquals(NearbyLocationsResult.Status.INVALID_ID, result.status);
 		print(result);

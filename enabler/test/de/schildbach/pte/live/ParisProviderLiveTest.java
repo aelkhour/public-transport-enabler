@@ -65,12 +65,6 @@ public class ParisProviderLiveTest extends AbstractNavitiaProviderLiveTest
 	}
 
 	@Test
-	public void nearbyStationsInvalidStation() throws Exception
-	{
-		nearbyStationsInvalidStation("stop_point:RTP:SP:392");
-	}
-
-	@Test
 	public void queryDeparturesEquivsFalse() throws Exception
 	{
 		queryDeparturesEquivsFalse("stop_point:RTP:SP:3926410");

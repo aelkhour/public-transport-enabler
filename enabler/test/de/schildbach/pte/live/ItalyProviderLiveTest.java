@@ -58,12 +58,6 @@ public class ItalyProviderLiveTest extends AbstractNavitiaProviderLiveTest
 	}
 
 	@Test
-	public void nearbyStationsInvalidStation() throws Exception
-	{
-		nearbyStationsInvalidStation("stop_point:9999999999");
-	}
-
-	@Test
 	public void queryDeparturesEquivsFalsePalermo() throws Exception
 	{
 		queryDeparturesEquivsFalse("stop_point:OTO:SP:54673002");
