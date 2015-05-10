@@ -57,24 +57,6 @@ public class ItalyProviderLiveTest extends AbstractNavitiaProviderLiveTest
 	}
 
 	@Test
-	public void queryDeparturesEquivsFalsePalermo() throws Exception
-	{
-		queryDeparturesEquivsFalse("stop_point:OTO:SP:54673002");
-	}
-
-	@Test
-	public void queryDeparturesStopAreaPalermo() throws Exception
-	{
-		queryDeparturesStopArea("stop_area:OPO:SA:1974");
-	}
-
-	@Test
-	public void queryDeparturesEquivsTruePalermo() throws Exception
-	{
-		queryDeparturesEquivsTrue("stop_point:OTO:SP:54673002");
-	}
-
-	@Test
 	public void queryDeparturesEquivsFalseRome() throws Exception
 	{
 		queryDeparturesEquivsFalse("stop_point:ORA:SP:AD10");
@@ -117,24 +99,6 @@ public class ItalyProviderLiveTest extends AbstractNavitiaProviderLiveTest
 	}
 
 	@Test
-	public void queryTripAddressesPalermo() throws Exception
-	{
-		queryTrip("Via Giuseppe Lanza di Scalea, 2703, 90147 Palermo", "Via Eugenio Montale, 12, Palermo");
-	}
-
-	@Test
-	public void queryTripAddressStationPalermo() throws Exception
-	{
-		queryTrip("Via Giuseppe Lanza di Scalea, 2703, 90147 Palermo", "Galletti - Zita");
-	}
-
-	@Test
-	public void queryTripStationsPalermo() throws Exception
-	{
-		queryTrip("Palermo Centrale", "Galletti Zita");
-	}
-
-	@Test
 	public void queryTripAddressesRome() throws Exception
 	{
 		queryTrip("Via Anton Giulio Barrili, 44-46, Roma", "Via delle Cave di Pietralata, 103, Roma");
@@ -168,24 +132,6 @@ public class ItalyProviderLiveTest extends AbstractNavitiaProviderLiveTest
 	public void queryTripUnknownTo() throws Exception
 	{
 		queryTripUnknownTo("Palermo Centrale");
-	}
-
-	@Test
-	public void queryTripSlowWalkPalermo() throws Exception
-	{
-		queryTripSlowWalk("Palermo Centrale", "Galletti Zita");
-	}
-
-	@Test
-	public void queryTripFastWalkPalermo() throws Exception
-	{
-		queryTripFastWalk("Palermo Centrale", "Galletti Zita");
-	}
-
-	@Test
-	public void queryMoreTripsPalermo() throws Exception
-	{
-		queryMoreTrips("Palermo Centrale", "Galletti Zita");
 	}
 
 	@Test
