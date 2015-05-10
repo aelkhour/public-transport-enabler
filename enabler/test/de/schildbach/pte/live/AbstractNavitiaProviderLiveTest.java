@@ -34,6 +34,7 @@ import de.schildbach.pte.dto.LineDestination;
 import de.schildbach.pte.dto.Location;
 import de.schildbach.pte.dto.LocationType;
 import de.schildbach.pte.dto.NearbyLocationsResult;
+import de.schildbach.pte.dto.Point;
 import de.schildbach.pte.dto.Product;
 import de.schildbach.pte.dto.QueryDeparturesResult;
 import de.schildbach.pte.dto.QueryTripsContext;
@@ -285,5 +286,12 @@ public abstract class AbstractNavitiaProviderLiveTest extends AbstractProviderLi
 		final QueryTripsResult prevResult = queryMoreTrips(context, false);
 		assertEquals(QueryTripsResult.Status.OK, prevResult.status);
 		print(prevResult);
+	}
+
+	@Test
+	public void getArea() throws Exception
+	{
+		final Point[] polygon = provider.getArea();
+		assertTrue(polygon.length > 0);
 	}
 }

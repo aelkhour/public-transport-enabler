@@ -21,7 +21,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import de.schildbach.pte.ItalyProvider;
-import de.schildbach.pte.dto.Point;
 
 /**
  * @author Antonio El Khoury
@@ -205,12 +204,5 @@ public class ItalyProviderLiveTest extends AbstractNavitiaProviderLiveTest
 	public void queryMoreTripsRome() throws Exception
 	{
 		queryMoreTrips("Ottaviano", "Policlinico");
-	}
-
-	@Test
-	public void getArea() throws Exception
-	{
-		final Point[] polygon = provider.getArea();
-		assertTrue(polygon.length > 0);
 	}
 }

@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import de.schildbach.pte.ParisProvider;
-import de.schildbach.pte.dto.Point;
 
 /**
  * @author Antonio El Khoury
@@ -176,12 +175,5 @@ public class ParisProviderLiveTest extends AbstractNavitiaProviderLiveTest
 	public void queryMoreTrips() throws Exception
 	{
 		queryMoreTrips("5 rue manin paris", "10 rue marcel dassault velizy");
-	}
-
-	@Test
-	public void getArea() throws Exception
-	{
-		final Point[] polygon = provider.getArea();
-		assertTrue(polygon.length > 0);
 	}
 }
