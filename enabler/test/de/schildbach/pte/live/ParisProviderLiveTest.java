@@ -49,13 +49,13 @@ public class ParisProviderLiveTest extends AbstractNavitiaProviderLiveTest
 	@Test
 	public void nearbyStationsStation() throws Exception
 	{
-		nearbyStationsStation("stop_point:RTP:SP:3926410");
+		nearbyStationsStation("colonel fabien");
 	}
 
 	@Test
 	public void nearbyStationsPoi() throws Exception
 	{
-		nearbyStationsPoi("poi:n668579722");
+		nearbyStationsPoi("Paris Belleville poste");
 	}
 
 	@Test

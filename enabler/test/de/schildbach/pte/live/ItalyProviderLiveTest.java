@@ -42,13 +42,13 @@ public class ItalyProviderLiveTest extends AbstractNavitiaProviderLiveTest
 	@Test
 	public void nearbyStationsStation() throws Exception
 	{
-		nearbyStationsStation("stop_point:OPO:SP:100");
+		nearbyStationsStation("APOLLO - AGLAIA");
 	}
 
 	@Test
 	public void nearbyStationsPoi() throws Exception
 	{
-		nearbyStationsPoi("poi:w300581846");
+		nearbyStationsPoi("Fontana di Trevi");
 	}
 
 	@Test

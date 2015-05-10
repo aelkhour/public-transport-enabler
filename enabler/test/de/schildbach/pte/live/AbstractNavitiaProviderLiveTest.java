@@ -50,6 +50,25 @@ public abstract class AbstractNavitiaProviderLiveTest extends AbstractProviderLi
 		super(provider);
 	}
 
+	protected final Location suggestLocation(final CharSequence constraint, final LocationType locationType) throws IOException
+	{
+		Location result = null;
+
+		// Get location suggestion list.
+		final SuggestLocationsResult suggestResult = suggestLocations(constraint);
+		assertEquals(SuggestLocationsResult.Status.OK, suggestResult.status);
+
+		// Return first location of required type.
+		List<Location> locations = suggestResult.getLocations();
+		for(Location location : locations)
+		{
+			if(location.type == locationType)
+				return location;
+		}
+
+		return result;
+	}
+
 	protected final void nearbyStationsAddress(final int lat, final int lon) throws IOException
 	{
 		final NearbyLocationsResult result = queryNearbyLocations(EnumSet.of(LocationType.STATION), Location.coord(lat, lon), 700, 10);
@@ -57,17 +76,22 @@ public abstract class AbstractNavitiaProviderLiveTest extends AbstractProviderLi
 		print(result);
 	}
 
-	protected final void nearbyStationsStation(final String stationId) throws IOException
+	protected final void nearbyStationsStation(final CharSequence station) throws IOException
 	{
-		final NearbyLocationsResult result = queryNearbyLocations(EnumSet.of(LocationType.STATION), new Location(LocationType.STATION, stationId),
-				700, 10);
+		final Location stationResult = suggestLocation(station, LocationType.STATION);
+		assertTrue(stationResult != null);
+
+		final NearbyLocationsResult result = queryNearbyLocations(EnumSet.of(LocationType.STATION), stationResult, 700, 10);
 		assertEquals(NearbyLocationsResult.Status.OK, result.status);
 		print(result);
 	}
 
-	protected final void nearbyStationsPoi(final String poiId) throws IOException
+	protected final void nearbyStationsPoi(final CharSequence poi) throws IOException
 	{
-		final NearbyLocationsResult result = queryNearbyLocations(EnumSet.of(LocationType.STATION), new Location(LocationType.POI, poiId), 700, 10);
+		final Location poiResult = suggestLocation(poi, LocationType.POI);
+		assertTrue(poiResult != null);
+
+		final NearbyLocationsResult result = queryNearbyLocations(EnumSet.of(LocationType.STATION), poiResult, 700, 10);
 		assertEquals(NearbyLocationsResult.Status.OK, result.status);
 		print(result);
 	}
