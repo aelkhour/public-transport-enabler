@@ -240,7 +240,7 @@ public abstract class AbstractNavitiaProvider extends AbstractNetworkProvider
 
 					final String name = WordUtils.capitalizeFully(poi.getString("name"));
 
-					return new Location(LocationType.ADDRESS, id, point.lat, point.lon, null, name);
+					return new Location(LocationType.POI, id, point.lat, point.lon, null, name);
 				}
 				default:
 					throw new IllegalArgumentException("Unhandled place type: " + type);
